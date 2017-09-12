@@ -7,6 +7,9 @@ Adafruit_MotorShield AFMS = Adafruit_MotorShield();
 // Or, create it with a different I2C address (say for stacking)
 // Adafruit_MotorShield AFMS = Adafruit_MotorShield(0x61); 
 
+// number of step for one revolution
+const int stepsPerRevolution = 200;
+
 //connect stepper to M1 M2
 Adafruit_StepperMotor *myMotor1 = AFMS.getStepper(200, 1);
 Adafruit_StepperMotor *myMotor2 = AFMS.getStepper(200, 2);
@@ -15,9 +18,10 @@ Adafruit_StepperMotor *myMotor2 = AFMS.getStepper(200, 2);
 
 void setup() {
   Serial.begin(9600);
-  Serial.println("Stepper test!");
+  Serial.println("Stepper start...");
 
-  AFMS.begin();  // create with the default frequency 1.6KHz
+  // create with the default frequency 1.6KHz
+  AFMS.begin();  
   //AFMS.begin(1000);  // OR with a different frequency, say 1KHz
   
   myMotor1->setSpeed(255);  //  rpm  
@@ -25,9 +29,16 @@ void setup() {
 }
 
 void loop() {
-  //myMotor1->step(100, FORWARD, DOUBLE);
-  //myMotor2->step(100, FORWARD, DOUBLE);
+  //Read the serial buffer as a string. data format as P
+  String data = Serial.readString();
 
+  if(data.length() > 0){
+    if(data.startsWith("P")){
+      //move stepper position
+      myMotor1->step(stepsPerRevolution, FORWARD, DOUBLE);
+      myMotor2->step(stepsPerRevolution, FORWARD, DOUBLE);
+    }
+  }
 
   /*
   //Serial.println("Single coil steps");
