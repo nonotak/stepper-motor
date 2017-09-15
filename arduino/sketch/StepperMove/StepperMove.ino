@@ -55,13 +55,37 @@ void loop() {
         steppers[i].reset();
       }
       //step backward all motor until end stop activated 
-    }
+    }else{
+        //move stepper position
+        for(int i=0; i<4; i++){
+          String position = getSplitValue(data,':',i);
+          Serial.println(position);
 
-    if(data.startsWith("P")){
-      //move stepper position
-      data
-      myMotor1->step(stepsPerRevolution, FORWARD, DOUBLE);
-      myMotor2->step(stepsPerRevolution, FORWARD, DOUBLE);
+          if(position.length() > 0){
+            int x = getSplitValue(position,'&',0).toInt();
+            int y = getSplitValue(position,'&',1).toInt();
+            steppers[i].move(x,y);  
+          }
+          
+        }  
+        //myMotor1->step(stepsPerRevolution, FORWARD, DOUBLE);
+        //myMotor2->step(stepsPerRevolution, FORWARD, DOUBLE);
     }
   }
 }
+
+String getSplitValue(String data, char separator, int index){
+  int found = 0;
+  int strIndex[] = {0, -1};
+  int maxIndex = data.length()-1;
+
+  for(int i=0; i<=maxIndex && found<=index; i++){
+    if(data.charAt(i)==separator || i==maxIndex){
+        found++;
+        strIndex[0] = strIndex[1]+1;
+        strIndex[1] = (i == maxIndex) ? i+1 : i;
+    }
+  }
+  return found>index ? data.substring(strIndex[0], strIndex[1]) : "";
+}
+
