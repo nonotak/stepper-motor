@@ -1,6 +1,7 @@
 //#include <Wire.h>
 #include <Adafruit_MotorShield.h>
 #include "utility/Adafruit_MS_PWMServoDriver.h"
+#include "StepperManage.h"
 
 // Create the motor shield object with the default I2C address
 //Adafruit_MotorShield AFMS = Adafruit_MotorShield();
@@ -13,10 +14,12 @@ Adafruit_MotorShield cards[4] = {
   Adafruit_MotorShield(0x63) 
 };
 
-//Adafruit_MotorShield AFMS1 = Adafruit_MotorShield(0x60);
-//Adafruit_MotorShield AFMS2 = Adafruit_MotorShield(0x61);
-//Adafruit_MotorShield AFMS3 = Adafruit_MotorShield(0x62);
-//Adafruit_MotorShield AFMS4 = Adafruit_MotorShield(0x63); 
+StepperManager steppers[4] = {
+  StepperManager(Adafruit_MotorShield(0x60),1,1),
+  StepperManager(Adafruit_MotorShield(0x61),1,1),
+  StepperManager(Adafruit_MotorShield(0x62),1,1),
+  StepperManager(Adafruit_MotorShield(0x63),1,1)
+};
 
 // number of step for one revolution
 const int stepsPerRevolution = 200;
