@@ -37,9 +37,10 @@ void setup() {
   //init all stacked card with default frequency
   for(int i = 0; i < 4; i++){
     // create with the default frequency 1.6KHz
-    cards[i].begin();
-    cards[i].getStepper(stepsPerRevolution, 1)->setSpeed(defaultSpeed);
-    cards[i].getStepper(stepsPerRevolution, 2)->setSpeed(defaultSpeed);
+    //cards[i].begin();
+    //cards[i].getStepper(stepsPerRevolution, 1)->setSpeed(defaultSpeed);
+    //cards[i].getStepper(stepsPerRevolution, 2)->setSpeed(defaultSpeed);
+    steppers[i].init();
   }
 }
 
@@ -50,17 +51,17 @@ void loop() {
   if(data.length() > 0){
 
     if(data.startsWith("RESET")){
+      for(int i = 0; i < 4; i++){
+        steppers[i].reset();
+      }
       //step backward all motor until end stop activated 
     }
 
     if(data.startsWith("P")){
       //move stepper position
+      data
       myMotor1->step(stepsPerRevolution, FORWARD, DOUBLE);
       myMotor2->step(stepsPerRevolution, FORWARD, DOUBLE);
     }
   }
-}
-
-void moveXYStepper(int card, int x, int y){
-  Serial.println("move stepper");
 }
