@@ -38,9 +38,10 @@ void StepperManager::move(int x, int y){
 }
 
 void StepperManager::reset(){
-
+    
 }
 
 void StepperManager::setSpeed(int speed){
-    
+    _card.getStepper(stepsPerRevolution, 1)->setSpeed(speed);
+    _card.getStepper(stepsPerRevolution, 2)->setSpeed(speed);
 }
