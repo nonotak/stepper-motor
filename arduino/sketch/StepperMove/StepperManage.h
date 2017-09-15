@@ -8,7 +8,9 @@ class StepperManager
 {
   public:
     StepperManager(Adafruit_MotorShield, int x, int y);
+    void init();
     void move(int x, int y);
+    void setSpeed(int speed);
     void reset();
   private:
     int _x;
