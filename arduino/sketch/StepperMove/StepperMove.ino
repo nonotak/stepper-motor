@@ -14,39 +14,98 @@ Adafruit_MotorShield cards[4] = {
   Adafruit_MotorShield(0x63) 
 };
 
-StepperManager steppers[4] = {
-  StepperManager(Adafruit_MotorShield(0x60),1,1),
-  StepperManager(Adafruit_MotorShield(0x61),1,1),
-  StepperManager(Adafruit_MotorShield(0x62),1,1),
-  StepperManager(Adafruit_MotorShield(0x63),1,1)
-};
-
 // number of step for one revolution
 const int stepsPerRevolution = 200;
 const int defaultSpeed = 255;
 
-//connect stepper to M1 M2
-Adafruit_StepperMotor *myMotor1 = cards[0].getStepper(stepsPerRevolution, 1);
-Adafruit_StepperMotor *myMotor2 = cards[0].getStepper(stepsPerRevolution, 2);
+void forwardstep1() {  
+  cards[0].getStepper(stepsPerRevolution, 1)->onestep(FORWARD, SINGLE);
+}
+void backwardstep1() {  
+  cards[0].getStepper(stepsPerRevolution, 1)->onestep(BACKWARD, SINGLE);
+}
+// wrappers for the second motor!
+void forwardstep2() {  
+  cards[0].getStepper(stepsPerRevolution, 2)->onestep(FORWARD, DOUBLE);
+}
+void backwardstep2() {  
+  cards[0].getStepper(stepsPerRevolution, 2)->onestep(BACKWARD, DOUBLE);
+}
 
+void forwardstep3() {  
+  cards[1].getStepper(stepsPerRevolution, 1)->onestep(FORWARD, SINGLE);
+}
+void backwardstep3() {  
+  cards[1].getStepper(stepsPerRevolution, 1)->onestep(BACKWARD, SINGLE);
+}
+// wrappers for the second motor!
+void forwardstep4() {  
+  cards[1].getStepper(stepsPerRevolution, 2)->onestep(FORWARD, DOUBLE);
+}
+void backwardstep4() {  
+  cards[1].getStepper(stepsPerRevolution, 2)->onestep(BACKWARD, DOUBLE);
+}
+
+void forwardstep5() {  
+  cards[2].getStepper(stepsPerRevolution, 1)->onestep(FORWARD, SINGLE);
+}
+void backwardstep5() {  
+  cards[2].getStepper(stepsPerRevolution, 1)->onestep(BACKWARD, SINGLE);
+}
+// wrappers for the second motor!
+void forwardstep6() {  
+  cards[2].getStepper(stepsPerRevolution, 2)->onestep(FORWARD, DOUBLE);
+}
+void backwardstep6() {  
+  cards[2].getStepper(stepsPerRevolution, 2)->onestep(BACKWARD, DOUBLE);
+}
+
+void forwardstep7() {  
+  cards[3].getStepper(stepsPerRevolution, 1)->onestep(FORWARD, SINGLE);
+}
+void backwardstep7() {  
+  cards[3].getStepper(stepsPerRevolution, 1)->onestep(BACKWARD, SINGLE);
+}
+// wrappers for the second motor!
+void forwardstep8() {  
+  cards[3].getStepper(stepsPerRevolution, 2)->onestep(FORWARD, DOUBLE);
+}
+void backwardstep8() {  
+  cards[3].getStepper(stepsPerRevolution, 2)->onestep(BACKWARD, DOUBLE);
+}
+
+AccelStepper stepper1(forwardstep1, backwardstep1);
+AccelStepper stepper2(forwardstep2, backwardstep2);
+
+AccelStepper stepper3(forwardstep3, backwardstep3);
+AccelStepper stepper4(forwardstep4, backwardstep4);
+
+AccelStepper stepper5(forwardstep5, backwardstep5);
+AccelStepper stepper6(forwardstep6, backwardstep6);
+
+AccelStepper stepper7(forwardstep7, backwardstep7);
+AccelStepper stepper8(forwardstep8, backwardstep8);
+
+/*StepperManager steppers[4] = {
+  StepperManager(cards[0],1,1,stepper1,stepper2),
+  StepperManager(cards[1],1,1,stepper3,stepper4),
+  StepperManager(cards[2],1,1,stepper5,stepper6),
+  StepperManager(cards[3],1,1,stepper7,stepper8)
+};*/
 
 void setup() {
   Serial.begin(9600);
   Serial.println("Stepper start...");
 
   //init all stacked card with default frequency
-  for(int i = 0; i < 4; i++){
-    // create with the default frequency 1.6KHz
-    //cards[i].begin();
-    //cards[i].getStepper(stepsPerRevolution, 1)->setSpeed(defaultSpeed);
-    //cards[i].getStepper(stepsPerRevolution, 2)->setSpeed(defaultSpeed);
+  /*for(int i = 0; i < 4; i++){
     steppers[i].init();
-  }
+  }*/
 }
 
 void loop() {
   //Read the serial buffer as a string. data format as P
-  String data = Serial.readString();
+  /*String data = Serial.readString();
 
   if(data.length() > 0){
 
@@ -66,26 +125,16 @@ void loop() {
             int y = getSplitValue(position,'&',1).toInt();
             steppers[i].move(x,y);  
           }
-          
         }  
-        //myMotor1->step(stepsPerRevolution, FORWARD, DOUBLE);
-        //myMotor2->step(stepsPerRevolution, FORWARD, DOUBLE);
     }
   }
+
+  //move and run the motors
+  for(int i=0; i<4; i++){
+    steppers[i].run();
+
+  }*/
 }
 
-String getSplitValue(String data, char separator, int index){
-  int found = 0;
-  int strIndex[] = {0, -1};
-  int maxIndex = data.length()-1;
 
-  for(int i=0; i<=maxIndex && found<=index; i++){
-    if(data.charAt(i)==separator || i==maxIndex){
-        found++;
-        strIndex[0] = strIndex[1]+1;
-        strIndex[1] = (i == maxIndex) ? i+1 : i;
-    }
-  }
-  return found>index ? data.substring(strIndex[0], strIndex[1]) : "";
-}
 
